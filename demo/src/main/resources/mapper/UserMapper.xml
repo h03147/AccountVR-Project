@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace=绑定一个对应的Dao接口 -->
+<mapper namespace="com.example.jsondowntest2.demo.dao.UserDao">
+
+    <!--注册前先判断该用户名是否已存在，
+    登录可复用该方法(根据前端传入的user.sno，若结果不为空再比对密码是否正确)-->
+    <select id="findBySno" resultType="User">
+        select * from user where sno=#{sno};
+    </select>
+
+    <!--    根据请求的id返回该行数据-->
+    <select id="findById" resultType="User">
+        select * from user where id=#{id};
+    </select>
+
+    <!--    先根据教师电话判断是否存在，存在则进一步验证密码-->
+    <select id="findByTeacher_Phone" resultType="User">
+        select * from user where teacher_phone=#{teacher_phone};
+    </select>
+
+    <!--    人员信息录入-->
+    <insert id="saveStudentNumber" parameterType="User">
+        insert into user (username,password,sno)
+        values (#{username},#{password},#{sno});
+    </insert>
+
+    <!--    查询全部人员信息-->
+    <select id="findAll" resultType="User">
+        select id,username,sno,password from user;
+    </select>
+    <!--    &lt;!&ndash;注册： saveUser对应dao层的方法名，parameterType：参数类型 &ndash;&gt;-->
+    <!--    <insert id="saveUser" parameterType="User">-->
+    <!--        insert into t_user (username,password,gender,registertime,state)-->
+    <!--        values (#{username},#{password},#{gender},#{registertime},#{state});-->
+    <!--    </insert>-->
+
+    <!--    更新学生信息-->
+    <!--修改员工信息-->
+    <update id="updateUser" parameterType="User">
+        update User set username=#{username},sno=#{sno},password=#{password}
+        where id=#{id};
+    </update>
+
+    <!--删除学生信息-->
+    <delete id="deleteById" parameterType="Integer">
+        delete from user where id =#{id};
+    </delete>
+</mapper>

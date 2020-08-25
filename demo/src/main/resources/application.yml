@@ -1,0 +1,36 @@
+server:
+  port: 8181
+spring:
+  http:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  datasource:
+    username: root
+    password: 111111
+    url: jdbc:mysql://localhost:3306/mybatis?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+# 集成mybatis
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.example.jsondowntest2.demo.entity
+##文件存储路径
+#filepath: D:/file/
+#  servlet:
+#    http:
+#      multipart:
+#        enabled: true # 开启上传文件
+#        file-size-threshold: 2KB # 文件写入磁盘的阀值
+#        max-file-size: 100MB
+#        max-request-size: 199MB # 最大请求值
+#
+## 自定义文件保存的路径
+#gorit:
+#  file:
+#    root:
+#      path: F:\testtemp\
