@@ -21,6 +21,12 @@
 <!--      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>-->
 <!--    </ul>-->
 <!--    <h3>Ecosystem</h3>-->
+<!--      .imgaddshadow {-->
+<!--      box-shadow:10px 0 30px blue inset!important;-->
+<!--      -webkit-box-shadow:0 0 30px blue inset!important;-->
+<!--      -moz-box-shadow:0 0 30px blue inset!important;-->
+<!--      -o-box-shadow:0 0 30px blue inset!important;-->
+<!--      }-->
 <!--    <ul>-->
 <!--      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>-->
 <!--      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>-->
@@ -33,13 +39,17 @@
 <!--                  <el-row class="elrow1"><p class="plabtitle" style="font-size: 50px; font-family: '黑体';">基于会计制造页虚拟仿真实验</p></el-row>-->
                   <el-row class="elrow2">
                       <template class="tempelcarousel">
-                          <el-carousel :interval="3000" arrow="never">
-                              <el-carousel-item v-for="item in 3" :key="item">
-<!--                                  <h3>{{ item }}</h3>-->
-                              </el-carousel-item>
-                          </el-carousel>
+
+                              <el-carousel :interval="3000" arrow="never">
+                                  <el-carousel-item v-for="item in 3" :key="item">
+                                      <!--                                  <h3>{{ item }}</h3>-->
+                                      <div class="imgaddshadow"></div>
+                                  </el-carousel-item>
+                              </el-carousel>
+
                       </template>
-                      <el-button type="primary" class="elbutton1">开始实验</el-button>
+<!--                      <router-link class="routerlinkaddmessage" to="/addmessage">开始实验</router-link>-->
+                      <el-button type="primary" class="elbutton1" @click="startexperiment">开始实验</el-button>
                   </el-row>
                 </el-main>
             </el-container>
@@ -77,7 +87,8 @@ export default {
   },
   mounted() {
     window.onload = function getsession() {
-       var msg =sessionStorage.getItem("token");
+       const msg =sessionStorage.getItem("token");
+       const isguest = sessionStorage.getItem("isguest")
        if(msg)
        {
          // Message.success("欢迎"+msg+"登入系统");
@@ -87,16 +98,35 @@ export default {
            showClose: true
          });
        }
-       else
+       else if(isguest)
        {
-         Message.error("未登录状态！，访客模式已启动");
+           Message.success("访客模式已启动！");
+       }else
+       {
+           Message.error("未登录状态，请您先去登录，谢谢！");
        }
     }
   },
     methods: {
         changeBackground() {
             console.log("点击了图片1")
+        },
+        // GotoVR(){
+        //     location.href = '/Acc/index.html';
+        // }
+        //开始试验
+        startexperiment() {
+            const msg =sessionStorage.getItem("token");
+            const isguest = sessionStorage.getItem("isguest")
+            if(msg || isguest)
+            {
+                this.$router.push('/addmessage');
+            }else
+            {
+                Message.error("请您先去登录，才能开始试验，谢谢！");
+            }
         }
+
     }
 
 }
@@ -167,6 +197,8 @@ a {
     position: relative;
     height: 500px!important;
 }
+
+
 .elbutton1 {
     width: 279px;
     border: 0;
@@ -180,10 +212,47 @@ a {
     background-color: #445f59;
 }
 
+/*css中按钮有四种状态*/
+
+/*1. 普通状态*/
+/*2. hover 鼠标悬停状态*/
+/*3. active 点击状态*/
+/*4. focus 取得焦点状态*/
+.elbutton1:focus {
+    background-color: rgba(40,161,134,0.76);
+}
+
 .changeColor {
     width: 166px;
     height: 55px;
 }
+
+.imgaddshadow {
+    width: 100%;
+    height: 100%;
+    box-shadow:200px 0px 390px -80px black inset, /*左边阴影*/
+    -200px 0px 390px -80px black inset, /*右边阴影*/
+    0 0px 0px blue inset, /*顶部阴影*/
+    0 0px 0px green inset; /*底边阴影*/
+    -webkit-box-shadow:200px 0px 390px -80px black inset, /*左边阴影*/
+    -200px 0px 390px -80px black inset, /*右边阴影*/
+    0 0px 0px blue inset, /*顶部阴影*/
+    0 0px 0px green inset; /*底边阴影*/
+    -moz-box-shadow:200px 0px 390px -80px black inset, /*左边阴影*/
+    -200px 0px 390px -80px black inset, /*右边阴影*/
+    0 0px 0px blue inset, /*顶部阴影*/
+    0 0px 0px green inset; /*底边阴影*/
+    -o-box-shadow:200px 0px 390px -80px black inset, /*左边阴影*/
+    -200px 0px 390px -80px black inset, /*右边阴影*/
+    0 0px 0px blue inset, /*顶部阴影*/
+    0 0px 0px green inset; /*底边阴影*/
+}
+
+.routerlinkaddmessage {
+    color: #E9EEF3;
+}
+
+
 
 
 

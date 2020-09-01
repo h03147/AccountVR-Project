@@ -2,6 +2,7 @@ package com.example.jsondowntest2.demo.controller;
 
 import com.example.jsondowntest2.demo.dao.UserDao;
 import com.example.jsondowntest2.demo.entity.User;
+import com.example.jsondowntest2.demo.repository.StudentreportcardRepository;
 import com.example.jsondowntest2.demo.service.UserService;
 import com.example.jsondowntest2.demo.util.VerifyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    private StudentreportcardRepository studentreportcardRepository;
+
 
     //学生登录
     @PostMapping("/login")
@@ -32,6 +36,7 @@ public class UserController {
         try {
             User userDB = userService.login(user);
             map.put("userDB", userDB.getUsername());
+            map.put("studentNo", userDB.getSno());
             map.put("state", true);
             map.put("msg", "登录成功！");
         } catch (Exception e) {
@@ -50,6 +55,7 @@ public class UserController {
         try {
             User userDB1 = userService.teacherlogin(user);
             map.put("userDB1", userDB1.getUsername());
+            map.put("teacherId", userDB1.getId());
             map.put("state", true);
             map.put("msg", "登录成功！");
         } catch (Exception e) {

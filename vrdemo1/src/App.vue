@@ -20,13 +20,13 @@
               <router-link class="routerlinktodataview" to="/dataview">数据统计</router-link>
             </el-menu-item>
             <el-menu-item index="4" v-if="!answershow">
-              <router-link class="routerlinktomessage" to="/message">答疑1</router-link>
+              <router-link class="routerlinktomessage" to="/message">答疑</router-link>
             </el-menu-item>
             <el-menu-item index="5" v-if="answershow">
-              <router-link class="routerlinkanswerquestion" to="/answerquestion">答疑2</router-link>
+              <router-link class="routerlinkanswerquestion" to="/answerquestion">答疑</router-link>
             </el-menu-item>
             <el-menu-item index="7">
-              <router-link class="routerlinkaddstudentnumber" to="/addstudentnumber">人员录入</router-link>
+              <router-link class="routerlinkaddstudentnumber" to="/addstudentnumber" v-if="answershow">人员录入</router-link>
             </el-menu-item>
 <!--            <el-submenu index="2">-->
 <!--              <template slot="title">在线讨论</template>-->
@@ -48,15 +48,15 @@
 <!--                </el-menu-item>-->
 <!--              </el-submenu>-->
 <!--            </el-submenu>-->
-            <el-menu-item index="3" disabled>内部接口</el-menu-item>
+<!--            <el-menu-item index="3" disabled>内部接口</el-menu-item>-->
 <!--            <el-menu-item index="4"><a href="http://dlcmkj.com" target="_blank">评价</a></el-menu-item>-->
 <!--            <el-menu-item index="4">-->
 <!--              <router-link class="routerlinktomessage" to="/message">答疑</router-link>-->
 <!--            </el-menu-item>-->
 
-            <el-menu-item index="6">
-              <router-link class="routerlinkaddmessage" to="/addmessage">学生提问</router-link>
-            </el-menu-item>
+<!--            <el-menu-item index="6">-->
+<!--              <router-link class="routerlinkaddmessage" to="/addmessage">学生提问</router-link>-->
+<!--            </el-menu-item>-->
 
 
             <!-- 登录导航栏-->
@@ -83,7 +83,7 @@
 <!--        </el-container>-->
         <el-container>
           <el-main class="elmainview">
-            <router-view></router-view>
+            <router-view v-if="isRouterAlive"></router-view>
           </el-main>
         </el-container>
       <el-footer class="elfontercontext">
@@ -101,6 +101,11 @@ export default {
   // components: {
   //   HelloWorld
   // },
+    provide() {
+        return {
+            reload: this.reload
+        }
+    },
   //导航栏默认激活选项
   data() {
     return {
@@ -109,7 +114,8 @@ export default {
       msg: '',
       isteacher: '',
       showname: false, //判断是否登录
-      answershow: false//根据登录时老师还是学生切换答疑菜单栏
+      answershow: false,//根据登录时老师还是学生切换答疑菜单栏
+        isRouterAlive: true
     };
   },
   created() {
@@ -146,7 +152,13 @@ export default {
       sessionStorage.clear();
       this.showname = false;
       this.answershow = false;
-    }
+    },
+      reload() {
+        this.isRouterAlive = false;
+        this.$nextTick(function () {
+            this.isRouterAlive = true;
+        })
+      }
   }
 }
 </script>
@@ -221,6 +233,7 @@ export default {
   height: 817px!important;
   margin: 0!important;
   padding: 0!important;
+  background-color: #ffffff;
 }
   .elhead1 {
     /*margin-bottom: 10px;*/

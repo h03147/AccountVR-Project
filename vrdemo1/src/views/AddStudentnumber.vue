@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="ideatitystatus == 'teacher'">
         <div class="headdiv1">
             <h1 class="h1data">信息录入</h1>
             <HR class="hrline" align=center width=300 color=#5D998B SIZE=1></HR>
@@ -40,7 +40,7 @@
                 <el-image :src="imgCode" id="img-vcode" @click="getCodeImage" alt="验证码" style="padding: 0 10px"></el-image>
             </el-col>
             <el-col :span="1"><el-input class="input-material" v-model="code" type="text" placeholder="输入验证码"></el-input></el-col>
-            <el-col :span="2"><el-button class="elbuttonselectall" @click="IdentityCodeImage()" type="primary" size="medium">查询人员信息</el-button></el-col>
+            <el-col :span="2"><el-button class="elbuttonselectall" @click="IdentityCodeImage()" type="primary" size="medium">搜索全部人员信息</el-button></el-col>
             <el-col :span="3"><el-input v-model="search" size="medium" placeholder="输入关键字搜索" class="elcolsearch"/></el-col>
         </el-row>
 
@@ -109,9 +109,9 @@
 
 <script>
     import axios from "axios";
-
+    import api from '../main';
     const $http = axios.create({
-        baseURL: 'http://localhost:8181',
+        baseURL: api.url,
         timeout: 1000,
         headers: {'X-Custom-Header': 'foobar'}
     });
@@ -123,6 +123,12 @@
                     username: '',
                     sno: '',
                     password: ''
+                },
+                addstudentreportcardForm: {
+                    sno: '',
+                    examstatus: '',
+                    examgrade: '',
+                    spendtime: ''
                 },
                 rules: {
                     username: [
@@ -141,15 +147,23 @@
                 tableData: [],
                 search: '',
                 msg: '',
+                ideatitystatus: '',
 
             };
         },
         created() {
+            this.ideatitystatus = sessionStorage.getItem('isteacher')
             // const _this = this;
             // axios.get('http://localhost:8181/findAll').then(function (resp) {
             //     console.log(resp);
             // })
-            this.getCodeImage();
+            if(this.ideatitystatus == 'teacher')
+            {
+                this.getCodeImage();
+            }else
+            {
+                this.$message.error('非法的接口请求，拦截成功！');
+            }
         },
         computed: {
             // 模糊搜索
@@ -181,7 +195,7 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         const _this = this;
-                        axios.post('http://localhost:8181/addstudentnumber', this.addstudentForm).then(function (resp) {
+                        axios.post(api.url + '/addstudentnumber', this.addstudentForm).then(function (resp) {
                             if(resp.data.state)
                             {
                                 _this.$message.success(resp.data.msg);
@@ -189,7 +203,17 @@
                             {
                                 _this.$message.error(resp.data.msg);
                             }
-                        })
+                        });
+                        this.addstudentreportcardForm.sno = this.addstudentForm.sno;
+                        axios.post(api.url + '/studentreportcard/addstudentrepotcard', this.addstudentreportcardForm).then(function (resp1) {
+                            if(resp1.data)
+                            {
+                                _this.$message.success(resp1.data);
+                            }else
+                            {
+                                _this.$message.error(resp1.data);
+                            }
+                        });
                     } else {
                         this.$message.error("Please input correct data!")
                         return false;
@@ -206,7 +230,7 @@
             IdentityCodeImage() {
                 const _this = this;
                 console.log(this.code);
-                axios.get('http://localhost:8181/findAll/' + this.code).then(function (resp) {
+                axios.get(api.url + '/findAll/' + this.code).then(function (resp) {
                     console.log(resp.data);
                     if(resp.data.state)
                     {
@@ -238,7 +262,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    axios.delete('http://localhost:8181/deleteByUserId/' + row.id).then(function (resp) {
+                    axios.delete(api.url + '/deleteByUserId/' + row.id).then(function (resp) {
                         // console.log("这是resp.data:" + resp.data);
                         // _this.msg = resp.data;
                         if(resp.data == 1)

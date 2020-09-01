@@ -1,19 +1,21 @@
 <template>
     <div>
-        <el-form :model="addmessageForm" :rules="rules" ref="addmessageForm" label-width="100px" class="demo-ruleForm">
-            <el-form-item label="问题描述" prop="question">
-                <el-input type="textarea" v-model="addmessageForm.question"
+        <el-form :inline="true" :model="addmessageForm" :rules="rules" ref="addmessageForm" label-width="80px" class="demo-ruleForm">
+            <iframe src="/Acc/index.html" width="1200" height="700" frameborder="0" scrolling="auto"style="position:relative;margin: 0 auto;"></iframe>
+            <el-form-item class="elformitem1" label="问题描述" prop="question">
+                <el-input class="elinput1" type="textarea" v-model="addmessageForm.question"
                           placeholder="Please describe your question(NOT NULL)"
-                          maxlength="9"
+                          maxlength="49"
                           show-word-limit></el-input>
             </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="submitForm('addmessageForm')">提交问题</el-button>
+            <el-form-item class="elformitem2">
+                <el-button class="elbtn1" size="small" type="primary" @click="submitForm('addmessageForm')">提交问题</el-button>
             </el-form-item>
         </el-form>
     </div>
 </template>
 <script>
+    import api from '../main'
     export default {
         data() {
             return {
@@ -34,10 +36,12 @@
                     if (valid) {
                         this.addmessageForm.student_name = sessionStorage.getItem("token");
                         const _this = this;
-                        axios.post('http://localhost:8181/message/addmessage', this.addmessageForm).then(function (resp) {
+                        axios.post(api.url + '/message/addmessage', this.addmessageForm).then(function (resp) {
                             console.log(resp.data);
                             _this.$message.success(resp.data);
+                            _this.addmessageForm.question = '';
                         })
+
                     } else {
                         this.$message.error("add message failed")
                         return false;
@@ -47,3 +51,30 @@
         }
     }
 </script>
+
+<style scoped>
+    .demo-ruleForm {
+        width: 1000px;
+        margin: 0 auto;
+        /*margin-top: 0%;*/
+    }
+    .elformitem1 {
+        width: 60%;
+        float: left;
+        margin-left: 11%;
+    }
+
+    .elinput1 {
+        width: 500px;
+    }
+
+    .elformitem2 {
+        float: left;
+    }
+
+    .elbtn1 {
+        background: #239973;
+        margin-top: 15%;
+    }
+
+</style>

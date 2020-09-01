@@ -23,9 +23,10 @@ public class FileController {
     //在文件操作中，不用/或者\最好，推荐使用File.separator
     private final static String  fileDir="files";
     private  final static String rootPath = System.getProperty("user.home")+File.separator+fileDir+File.separator;
+    private final static String filePath = "F:\\20200810yejia\\"+File.separator+fileDir+File.separator;
     @RequestMapping("/upload")
     public Object uploadFile(@RequestParam("file") MultipartFile[] multipartFiles, final HttpServletResponse response, final HttpServletRequest request){
-        File fileDir = new File(rootPath);
+        File fileDir = new File(filePath);
         if (!fileDir.exists() && !fileDir.isDirectory()) {
             fileDir.mkdirs();
         }
@@ -34,7 +35,7 @@ public class FileController {
                 for(int i = 0;i<multipartFiles.length;i++){
                     try {
                         //以原来的名称命名,覆盖掉旧的
-                        String storagePath = rootPath+multipartFiles[i].getOriginalFilename();
+                        String storagePath = filePath+multipartFiles[i].getOriginalFilename();
                         logger.info("上传的文件：" + multipartFiles[i].getName() + "," + multipartFiles[i].getContentType() + "," + multipartFiles[i].getOriginalFilename()
                                 +"，保存的路径为：" + storagePath);
                         Streams.copy(multipartFiles[i].getInputStream(), new FileOutputStream(storagePath), true);

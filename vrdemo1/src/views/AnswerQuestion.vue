@@ -2,6 +2,9 @@
     <div>
         <el-table
                 :data="getQuestion"
+                :header-cell-style="{background:'#C7E2DC', 'text-align':'center'}"
+                :cell-style="{'text-align':'center'}"
+                v-if="ideatitystatus == 'teacher'"
                 style="width: 100%">
             <el-table-column
                     prop="id"
@@ -47,24 +50,35 @@
 </template>
 
 <script>
+    import api from '../main'
     export default {
+        inject: ['reload'], //依赖注入
         name: "AnswerQuestion",
         data() {
             return {
                 getQuestion: [{
-                    id: '1',
-                    request_time: '2016-05-02 11:22:16',
-                    student_name: '王小虎',
-                    question: '上海市普陀区金沙江路 1518 弄',
-                    answer: '未答复'
-                }]
+                    id: '',
+                    request_time: '',
+                    student_name: '',
+                    question: '',
+                    answer: '',
+                }],
+                ideatitystatus: ''
             }
         },
         created() {
             const _this = this;
-            axios.get('http://localhost:8181/message/findAll').then(function (resp) {
-                _this.getQuestion = resp.data;
-            })
+            this.ideatitystatus =sessionStorage.getItem("isteacher");
+            if(this.ideatitystatus == 'teacher')
+            {
+                axios.get(api.url + '/message/findAll').then(function (resp) {
+                    _this.getQuestion = resp.data;
+                });
+            }else
+            {
+                _this.$message.error("非法的接口请求，拦截成功！")
+            }
+
         },
         methods: {
             handleEdit(row) {
@@ -86,14 +100,15 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    axios.delete('http://localhost:8181/message/deleteById/' + row.id).then(function (resp) {
+                    axios.delete(api.url + '/message/deleteById/' + row.id).then(function (resp) {
                         // console.log(resp.data);
                     });
                     this.$message({
                         type: 'success',
                         message: '删除成功!'
                     });
-                    window.location.reload();//页面刷新
+                    this.reload(); //调用注入的方法达到刷新router-view的目的
+                    // window.location.reload();//页面刷新
                 }).catch(() => {
                     this.$message({
                         type: 'info',

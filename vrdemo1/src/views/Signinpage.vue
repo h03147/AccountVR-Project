@@ -43,8 +43,9 @@
 
 <script>
     import axios from 'axios'
+    import api from '../main';
     const $http = axios.create({
-        baseURL: 'http://localhost:8181',
+        baseURL: api.url,
         timeout: 1000,
         headers: {'X-Custom-Header': 'foobar'}
     });
@@ -90,6 +91,9 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid)
                     {
+                        axios.get(api.url + "/statistics/addguestnumber").then(response => {
+                            console.log("请求了访问量加一");
+                        });
                         if(this.ruleForm.identity == 'guest')
                         {
                             this.guestlogin();
@@ -123,10 +127,12 @@
                 {
                     this.$message.success('登录成功');
                     localStorage.setItem("ruleForm", JSON.stringify(res.userDB));
+                    sessionStorage.setItem("studentNo", JSON.stringify(res.studentNo));
                     console.log(res.userDB);
+                    console.log("这是学生的id"+res.studentNo);
                     this.response_ruleForm = res.userDB;
                     sessionStorage.setItem("token", this.response_ruleForm);
-                    location.href = './';
+                    location.href = '/';
                 }else
                 {
                     this.$message.error(res.msg);
@@ -140,11 +146,13 @@
                 {
                     this.$message.success('登录成功');
                     localStorage.setItem("ruleForm", JSON.stringify(res.userDB1));
+                    sessionStorage.setItem("teacherId", JSON.stringify(res.teacherId));
                     console.log(res.userDB1);
+                    console.log("这是老师的id"+res.teacherId);
                     this.response_ruleForm = res.userDB1;
                     sessionStorage.setItem("token", this.response_ruleForm);
                     sessionStorage.setItem("isteacher", "teacher");
-                    location.href = './';
+                    location.href = '/';
                 }else
                 {
                     this.$message.error(res.msg);
@@ -152,7 +160,8 @@
             },
             //访客登录
             guestlogin() {
-                location.href = './';
+                sessionStorage.setItem("isguest", "guest");
+                location.href = '/';
             },
             // 要动态监听的方法，通过在组件内添加@change="方法名"属性来实现实时监听这个组件的数据变化
             currStationChange(val) {
@@ -243,6 +252,7 @@
         margin-top: 50px;
         margin-left: -194.5px!important;
         padding: 0;
+        opacity: 0.52;
     }
     .el-col {
         height: 20px!important;

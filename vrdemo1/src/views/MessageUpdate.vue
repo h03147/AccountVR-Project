@@ -24,6 +24,7 @@
 </template>
 
 <script>
+    import api from '../main'
     export default {
         name: "MessageUpdate",
         data() {
@@ -54,7 +55,7 @@
                     this.ruleForm.teacher_name = sessionStorage.getItem("token");
                     // console.log(this.ruleForm);
                     if (valid) {
-                        axios.put('http://localhost:8181/message/update/', this.ruleForm).then(function (resp) {
+                        axios.put(api.url + '/message/update/', this.ruleForm).then(function (resp) {
                             if(resp.data == 'success')
                             {
                                 _this.$alert('回复成功！', '消息', {
@@ -85,7 +86,7 @@
             const _this = this;
             //注意发送页面用$router跳转并传参数，接收页用$route接收参数
             // alert(this.$route.query.id);
-            axios.get('http://localhost:8181/message/findById/' + this.$route.query.id).then(function (resp) {
+            axios.get(api.url + '/message/findById/' + this.$route.query.id).then(function (resp) {
                 _this.ruleForm = resp.data
             })
         }

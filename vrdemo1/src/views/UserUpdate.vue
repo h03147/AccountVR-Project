@@ -23,6 +23,7 @@
 </template>
 
 <script>
+    import api from '../main'
     export default {
         name: "UserUpdate",
         data() {
@@ -57,7 +58,7 @@
                     // this.ruleForm.teacher_name = sessionStorage.getItem("token");
                     // console.log(this.ruleForm);
                     if (valid) {
-                        axios.post('http://localhost:8181/updateSingle/', this.ruleForm).then(function (resp) {
+                        axios.post(api.url + '/updateSingle/', this.ruleForm).then(function (resp) {
                             console.log(resp);
                             if(resp.data)
                             {
@@ -90,7 +91,7 @@
             console.log(this.$route.query.id)
             //注意发送页面用$router跳转并传参数，接收页用$route接收参数
             // alert(this.$route.query.id);
-            axios.get('http://localhost:8181/findById/' + this.$route.query.id).then(function (resp) {
+            axios.get(api.url + '/findById/' + this.$route.query.id).then(function (resp) {
                 console.log(resp.data);
                 _this.ruleForm = resp.data;
                 console.log("ruleForm:")
