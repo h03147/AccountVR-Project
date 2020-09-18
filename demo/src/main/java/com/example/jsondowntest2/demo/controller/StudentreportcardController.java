@@ -216,7 +216,7 @@ public class StudentreportcardController {
         Studentreportcard addstudentresult =studentreportcardRepository.save(studentreportcard);
         if(addstudentresult != null)
         {
-            return "add student success!";
+            return "student reportcard default success!";
         }else
         {
             return "add student failed!";

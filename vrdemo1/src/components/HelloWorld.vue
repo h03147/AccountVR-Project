@@ -50,6 +50,7 @@
                       </template>
 <!--                      <router-link class="routerlinkaddmessage" to="/addmessage">开始实验</router-link>-->
                       <el-button type="primary" class="elbutton1" @click="startexperiment">开始实验</el-button>
+
                   </el-row>
                 </el-main>
             </el-container>
@@ -109,7 +110,7 @@ export default {
   },
     methods: {
         changeBackground() {
-            console.log("点击了图片1")
+            // console.log("点击了图片1")
         },
         // GotoVR(){
         //     location.href = '/Acc/index.html';
@@ -204,7 +205,11 @@ a {
     border: 0;
     margin-top: -128px;
     margin-left: -139px;
-    background-color: rgba(40,161,134,0.76);
+    background-color: #27A185;
+    font-size: 0.8vw;
+    font-family: Source Han Sans SC;
+    font-weight: 500;
+    color: #FFFEFE;
     position: absolute;
     z-index: 2;
 }
@@ -230,20 +235,20 @@ a {
 .imgaddshadow {
     width: 100%;
     height: 100%;
-    box-shadow:200px 0px 390px -80px black inset, /*左边阴影*/
-    -200px 0px 390px -80px black inset, /*右边阴影*/
+    box-shadow:50px 0px 150px -90px black inset, /*左边阴影*/
+    -50px 0px 150px -90px black inset, /*右边阴影*/
     0 0px 0px blue inset, /*顶部阴影*/
     0 0px 0px green inset; /*底边阴影*/
-    -webkit-box-shadow:200px 0px 390px -80px black inset, /*左边阴影*/
-    -200px 0px 390px -80px black inset, /*右边阴影*/
+    -webkit-box-shadow:50px 0px 150px -90px black inset, /*左边阴影*/
+    -50px 0px 150px -90px black inset, /*右边阴影*/
     0 0px 0px blue inset, /*顶部阴影*/
     0 0px 0px green inset; /*底边阴影*/
-    -moz-box-shadow:200px 0px 390px -80px black inset, /*左边阴影*/
-    -200px 0px 390px -80px black inset, /*右边阴影*/
+    -moz-box-shadow:50px 0px 150px -90px black inset, /*左边阴影*/
+    -50px 0px 150px -90px black inset, /*右边阴影*/
     0 0px 0px blue inset, /*顶部阴影*/
     0 0px 0px green inset; /*底边阴影*/
-    -o-box-shadow:200px 0px 390px -80px black inset, /*左边阴影*/
-    -200px 0px 390px -80px black inset, /*右边阴影*/
+    -o-box-shadow:50px 0px 150px -90px black inset, /*左边阴影*/
+    -50px 0px 150px -90px black inset, /*右边阴影*/
     0 0px 0px blue inset, /*顶部阴影*/
     0 0px 0px green inset; /*底边阴影*/
 }

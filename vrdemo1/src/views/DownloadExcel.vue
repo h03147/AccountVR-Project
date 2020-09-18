@@ -52,10 +52,10 @@
         },
         methods: {
             handleRemove(file, fileList) {
-                console.log(file, fileList);
+                // console.log(file, fileList);
             },
             handlePreview(file) {
-                console.log(file);
+                // console.log(file);
             },
             handleExceed(files, fileList) {
                 this.$message.warning(`当前限制选择 4 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);

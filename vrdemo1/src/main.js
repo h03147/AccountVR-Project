@@ -22,7 +22,7 @@ new Vue({
 }).$mount('#app')
 
 const url = "http://210.30.0.6:80";
-// const url = "http://192.168.31.79:80";
+// const url = "http://192.168.31.100:80";
 const url1 = "http://192.168.31.80:8080";
 
 export default {

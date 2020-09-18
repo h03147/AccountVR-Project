@@ -14,50 +14,20 @@
                    active-text-color="#ffd04b"
                    style="width: 70%">
             <el-menu-item index="1">
-              <router-link class="routerlinktoHomepage" to="/">首页</router-link>
+              <router-link class="routerlinktoHomepage" to="/" @click.native="getData($event,'1')">首页</router-link>
             </el-menu-item>
             <el-menu-item index="8">
-              <router-link class="routerlinktodataview" to="/dataview">数据统计</router-link>
+              <router-link class="routerlinktodataview" to="/dataview" @click.native="getData($event,'8')">数据统计</router-link>
             </el-menu-item>
             <el-menu-item index="4" v-if="!answershow">
-              <router-link class="routerlinktomessage" to="/message">答疑</router-link>
+              <router-link class="routerlinktomessage" to="/message" @click.native="getData($event,'4')">答疑</router-link>
             </el-menu-item>
             <el-menu-item index="5" v-if="answershow">
-              <router-link class="routerlinkanswerquestion" to="/answerquestion">答疑</router-link>
+              <router-link class="routerlinkanswerquestion" to="/answerquestion" @click.native="getData($event,'5')">答疑</router-link>
             </el-menu-item>
             <el-menu-item index="7">
-              <router-link class="routerlinkaddstudentnumber" to="/addstudentnumber" v-if="answershow">人员录入</router-link>
+              <router-link class="routerlinkaddstudentnumber" to="/addstudentnumber" v-if="answershow" @click.native="getData($event,'7')">人员录入</router-link>
             </el-menu-item>
-<!--            <el-submenu index="2">-->
-<!--              <template slot="title">在线讨论</template>-->
-<!--              <el-menu-item index="2-1">-->
-<!--                <router-link class="routerlinktologinpage" to="/loginpage">登录</router-link>-->
-<!--              </el-menu-item>-->
-<!--              <el-menu-item index="2-2">选项2</el-menu-item>-->
-<!--              <el-menu-item index="2-3">选项3</el-menu-item>-->
-<!--              <el-submenu index="2-4">-->
-<!--                <template slot="title">选项4</template>-->
-<!--                <el-menu-item index="2-4-1">-->
-<!--                  <router-link class="routerlinktomessage" to="/message">问答系统</router-link>-->
-<!--                </el-menu-item>-->
-<!--                <el-menu-item index="2-4-2">-->
-<!--                  <router-link class="routerlinktohome" to="/">home</router-link>-->
-<!--                </el-menu-item>-->
-<!--                <el-menu-item index="2-4-3">-->
-<!--                  <router-link class="routerlinktoabout" to="/about">关于我们</router-link>-->
-<!--                </el-menu-item>-->
-<!--              </el-submenu>-->
-<!--            </el-submenu>-->
-<!--            <el-menu-item index="3" disabled>内部接口</el-menu-item>-->
-<!--            <el-menu-item index="4"><a href="http://dlcmkj.com" target="_blank">评价</a></el-menu-item>-->
-<!--            <el-menu-item index="4">-->
-<!--              <router-link class="routerlinktomessage" to="/message">答疑</router-link>-->
-<!--            </el-menu-item>-->
-
-<!--            <el-menu-item index="6">-->
-<!--              <router-link class="routerlinkaddmessage" to="/addmessage">学生提问</router-link>-->
-<!--            </el-menu-item>-->
-
 
             <!-- 登录导航栏-->
             <el-menu-item index="9"  class="menuitemchangeloginstatus">
@@ -119,9 +89,10 @@ export default {
     };
   },
   created() {
+    this.activeIndex = sessionStorage.getItem('num')
     this.msg =sessionStorage.getItem("token");
     this.isteacher =sessionStorage.getItem("isteacher");
-    console.log("老师来了 名字：" + this.isteacher);
+    // console.log("老师来了 名字：" + this.isteacher);
     if(this.isteacher == "teacher")
     {
       this.answershow = true;
@@ -139,10 +110,12 @@ export default {
     {
       this.showname = false;
     }
+
+
   },
   methods: {
     handleSelect(key, keyPath) {
-      console.log(key, keyPath);
+      // console.log(key, keyPath);
     },
     ClearSession() {
       //清除所有缓存
@@ -158,6 +131,11 @@ export default {
         this.$nextTick(function () {
             this.isRouterAlive = true;
         })
+      },
+      //手动获取index的值
+      getData(e,num) {
+        // console.log("这是抓的index属性值：" + num);
+        sessionStorage.setItem("num", num);
       }
   }
 }
@@ -224,6 +202,7 @@ export default {
 /*router-link激活时的颜色设置--*/
 .routerlinktohome, .routerlinkanswerquestion, .routerlinktologinpage, .routerlinktomessage, .routerlinktoabout,
 .routerlinktohome, .routerlinktoHomepage, .routerlinkaddmessage, .routerlinkaddstudentnumber, .routerlinktodataview {
+    font-size: 0.8vw;
     text-decoration: none;
     color: azure;
     }

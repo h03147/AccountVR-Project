@@ -12,9 +12,9 @@ public class ErrorConfigurar implements ErrorPageRegistrar {
 
     @Override
     public void registerErrorPages(ErrorPageRegistry registry) {
-        ErrorPage[] errorPages = new ErrorPage[1];
-        errorPages[0] = new ErrorPage(HttpStatus.NOT_FOUND, "/index.html");
-//        errorPages[1] = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/500.html");
+        ErrorPage[] errorPages = new ErrorPage[2];
+        errorPages[0] = new ErrorPage(HttpStatus.NOT_FOUND, "/index.html"); //404报错捕获
+        errorPages[1] = new ErrorPage(HttpStatus.METHOD_NOT_ALLOWED, "/index.html"); //405报错捕获
 
 //        registry.addError(errorPages);
         registry.addErrorPages(errorPages);

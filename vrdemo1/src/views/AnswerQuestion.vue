@@ -107,8 +107,11 @@
                         type: 'success',
                         message: '删除成功!'
                     });
-                    this.reload(); //调用注入的方法达到刷新router-view的目的
-                    // window.location.reload();//页面刷新
+                    // this.reload(); 调用注入的方法达到刷新router-view的目的
+                    //延迟1秒来缓存数据
+                    setTimeout( function(){
+                        location.reload();//页面刷新
+                    }, 1 * 1000 );//延迟1000毫米
                 }).catch(() => {
                     this.$message({
                         type: 'info',

@@ -1,11 +1,11 @@
 <template>
     <div>
         <el-form :inline="true" :model="addmessageForm" :rules="rules" ref="addmessageForm" label-width="80px" class="demo-ruleForm">
-            <iframe src="/Acc/index.html" width="1200" height="700" frameborder="0" scrolling="auto"style="position:relative;margin: 0 auto;"></iframe>
+            <iframe src="/Acc/index.html" width="1200" height="700" frameborder="0" scrolling="auto"style="position:relative;margin: 0 auto;margin-left: -11%"></iframe>
             <el-form-item class="elformitem1" label="问题描述" prop="question">
                 <el-input class="elinput1" type="textarea" v-model="addmessageForm.question"
                           placeholder="Please describe your question(NOT NULL)"
-                          maxlength="49"
+                          maxlength="100"
                           show-word-limit></el-input>
             </el-form-item>
             <el-form-item class="elformitem2">
@@ -25,10 +25,23 @@
                 },
                 rules: {
                     question: [
-                        { required: true, message: '提问内容不能为空', trigger: 'blur' }
+                        { required: true, message: '提问内容不能为空', trigger: 'blur' },
                     ]
                 }
             };
+        },
+        created() {
+          let teacher = sessionStorage.getItem('isteacher');
+          let student = sessionStorage.getItem('isstudent');
+          let guest = sessionStorage.getItem('isguest');
+          if(teacher === 'teacher' || student === 'student' || guest === 'guest')
+          {
+              this.$message.success("欢迎进入实验");
+          }else
+          {
+              this.$message.warning("非法的数据请求，已拦截");
+              this.$router.push('/');
+          }
         },
         methods: {
             submitForm(formName) {
@@ -37,7 +50,7 @@
                         this.addmessageForm.student_name = sessionStorage.getItem("token");
                         const _this = this;
                         axios.post(api.url + '/message/addmessage', this.addmessageForm).then(function (resp) {
-                            console.log(resp.data);
+                            // console.log(resp.data);
                             _this.$message.success(resp.data);
                             _this.addmessageForm.question = '';
                         })
@@ -61,7 +74,7 @@
     .elformitem1 {
         width: 60%;
         float: left;
-        margin-left: 11%;
+        /*margin-left: 11%;*/
     }
 
     .elinput1 {

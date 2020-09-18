@@ -13,7 +13,7 @@
                 <el-input size="medium" type="text" v-model="addstudentForm.sno" placeholder="学生学号"></el-input>
             </el-form-item>
             <el-form-item  prop="password">
-                <el-input size="medium" type="text" v-model="addstudentForm.password" placeholder="登录密码"></el-input>
+                <el-input size="medium" type="password" v-model="addstudentForm.password" placeholder="登录密码" show-password></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button class="addbutton1" size="medium" type="primary" @click="submitForm('addstudentForm')">添加</el-button>
@@ -110,6 +110,7 @@
 <script>
     import axios from "axios";
     import api from '../main';
+    import crypto123 from 'crypto'
     const $http = axios.create({
         baseURL: api.url,
         timeout: 1000,
@@ -194,26 +195,42 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        const _this = this;
-                        axios.post(api.url + '/addstudentnumber', this.addstudentForm).then(function (resp) {
-                            if(resp.data.state)
-                            {
-                                _this.$message.success(resp.data.msg);
-                            }else
-                            {
-                                _this.$message.error(resp.data.msg);
-                            }
-                        });
-                        this.addstudentreportcardForm.sno = this.addstudentForm.sno;
-                        axios.post(api.url + '/studentreportcard/addstudentrepotcard', this.addstudentreportcardForm).then(function (resp1) {
-                            if(resp1.data)
-                            {
-                                _this.$message.success(resp1.data);
-                            }else
-                            {
-                                _this.$message.error(resp1.data);
-                            }
-                        });
+
+                        let phoneTest = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,50}$/;  //校验密码8-18位
+
+                        if (!phoneTest.test(this.addstudentForm.password)) {
+                            this.$message.error('请不要设置简单密码，密码须包含数字、字母两种元素，且密码位数为8-50位');
+                            return false;
+                        }else
+                        {
+                            // 密码MD5加密
+                            const md5 = crypto123.createHash('md5');
+                            md5.update(this.addstudentForm.password);
+                            let aftermd5password = md5.digest('hex');
+                            // this.$message.success('加密后的密码为' + aftermd5password);
+                            this.addstudentForm.password = aftermd5password;
+                            const _this = this;
+                            axios.post(api.url + '/addstudentnumber', this.addstudentForm).then(function (resp) {
+                                if(resp.data.state)
+                                {
+                                    _this.$message.success(resp.data.msg);
+                                }else
+                                {
+                                    _this.$message.error(resp.data.msg);
+                                }
+                            });
+                            this.addstudentreportcardForm.sno = this.addstudentForm.sno;
+                            axios.post(api.url + '/studentreportcard/addstudentrepotcard', this.addstudentreportcardForm).then(function (resp1) {
+                                if(resp1.data)
+                                {
+                                    _this.$message.success(resp1.data);
+                                }else
+                                {
+                                    _this.$message.error(resp1.data);
+                                }
+                            });
+                        }
+
                     } else {
                         this.$message.error("Please input correct data!")
                         return false;
@@ -224,21 +241,22 @@
             async getCodeImage() {
                 const {data: res} = await $http.get("/getImage");
                 // console.log("解构前：" + res.data);
-                console.log("后端返回的base64数据：", res);
+                // console.log("后端返回的base64数据：", res);
                 this.imgCode = "data:image/png;base64," + res;
             },
             IdentityCodeImage() {
                 const _this = this;
-                console.log(this.code);
+                // console.log(this.code);
                 axios.get(api.url + '/findAll/' + this.code).then(function (resp) {
-                    console.log(resp.data);
+                    // console.log(resp.data);
                     if(resp.data.state)
                     {
                         _this.tableData =resp.data.list;
-                        console.log(_this.tableData);
+                        _this.getCodeImage();
+                        // console.log(_this.tableData);
                     }else
                     {
-                        _this.$message.error("非法的数据请求！");
+                        _this.$message.error("验证码错误！");
                     }
 
                 })

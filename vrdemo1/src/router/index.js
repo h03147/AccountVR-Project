@@ -65,20 +65,18 @@ Vue.use(VueRouter)
     },
     {
       path: '/dataview',
+      name: 'DataView',
       component: () => import('../views/DataView')
     },
     {
       path: '/homepageswitchmenu',
       component: () => import('../views/HomePageSwitchmenu')
     },
-    // {
-    //   path: '/tosigninpage',
-    //   name: 'Tosigninpage',
-    //   component: {
-    //     con: toSigninpage
-    //
-    // }
-    // }
+    {
+      path: '/batchaddstudent',
+      name: 'BatchAddStudent',
+      component: () => import('../views/BatchAddStudent')
+    }
 ]
 
 const router = new VueRouter({

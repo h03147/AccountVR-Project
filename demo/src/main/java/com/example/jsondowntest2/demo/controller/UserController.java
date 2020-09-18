@@ -8,6 +8,7 @@ import com.example.jsondowntest2.demo.util.VerifyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -128,6 +129,23 @@ public class UserController {
                 map.put("state", false);
             }
             return map;
+    }
+
+    // 登录界面比对验证码
+    @GetMapping("/SigninIdentityCodeImage/{code}")
+    public String SigninIdentityCodeImage(@PathVariable("code") String code, HttpServletRequest request) {
+        System.out.println("前端进行登录验证码请求：" + code);
+        String yCode = (String) request.getServletContext().getAttribute("yCode");
+        System.out.println("这是后端需要比对的验证码" + yCode);
+
+        if(yCode.equalsIgnoreCase(code))
+        {
+            return "true";
+        }else
+        {
+            return "验证码错误";
+        }
+
     }
 
     @Autowired

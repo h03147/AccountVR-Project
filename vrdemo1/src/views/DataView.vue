@@ -105,8 +105,8 @@
             const _this = this;
             axios.get(api.url + "/studentreportcard/studentcount/").then(response => {
                 const res1 = response.data;
-                console.log("请求回调的内容sturesultlist1"+res1.sturesultlist1);
-                console.log("请求回调的内容sturesultlist3"+res1.sturesultlist3);
+                // console.log("请求回调的内容sturesultlist1"+res1.sturesultlist1);
+                // console.log("请求回调的内容sturesultlist3"+res1.sturesultlist3);
                 _this.stugotlist = res1.sturesultlist1;
                 _this.scorecounttable = res1.sturesultlist3;
             });
@@ -126,7 +126,7 @@
                 const myChart333 = this.echarts.init(document.getElementById('myEcharts333'));
                 axios.get(api.url + "/studentreportcard/studentcount/").then(response => {
                     const res = response.data;
-                    console.log("分数统计" + res.sturesultlist2);
+                    // console.log("分数统计" + res.sturesultlist2);
                     _this.gradepietable = res.sturesultlist2;
                     _this.submittednumbertable = res.sturesultlist5
                     let index2 = 0;
@@ -556,7 +556,7 @@
                 const myEChartsLine = this.echarts.init(document.getElementById('myEchartsLine'));
                 axios.get(api.url + "/studentreportcard/studentcount/").then(response => {
                     const res2 = response.data;
-                    console.log("请求回调的内容sturesultlist4"+res2.sturesultlist4);
+                    // console.log("请求回调的内容sturesultlist4"+res2.sturesultlist4);
                     _this.timecount = res2.sturesultlist4;
                     const yData = ['平均时长', '总时长'];
                     const dataArr = _this.timecount;

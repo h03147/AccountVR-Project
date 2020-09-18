@@ -25,10 +25,12 @@ public class UserServiceImpl implements UserService {
             if (userBySno.getPassword().equals(user.getPassword())){
                 return userBySno;
             }else {
-                throw new RuntimeException("密码不正确！");
+//                throw new RuntimeException("密码不正确！");
+                throw new RuntimeException("用户名或密码不正确！");
             }
         }else {
-            throw new RuntimeException("学号不存在！");
+//            throw new RuntimeException("学号不存在！");
+            throw new RuntimeException("用户名或密码不正确！");
         }
     }
 
@@ -44,11 +46,13 @@ public class UserServiceImpl implements UserService {
                 return userByTeacher_Phone;
             }else
             {
-                throw new RuntimeException("密码不正确！");
+//                throw new RuntimeException("密码不正确！");
+                throw new RuntimeException("用户名或密码不正确！");
             }
         }else
         {
-            throw new RuntimeException("教师账号不存在！");
+//            throw new RuntimeException("教师账号不存在！");
+            throw new RuntimeException("用户名或密码不正确！");
         }
     }
 

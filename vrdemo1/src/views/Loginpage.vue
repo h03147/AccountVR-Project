@@ -57,15 +57,15 @@
 
             async login() {
                 const {data: res} = await $http.post("/login", this.user);
-                console.log("后端返回的数据：", res);
+                // console.log("后端返回的数据：", res);
                 if (res.state) {
                     this.$message.success('登录成功');
                     // 将后端返回的用户信息保存在浏览器的 Local Storage 中（key：value），方便后面业务使用
                     // 这样保存的是一个对象，不方便使用，使用javascript中的 JSON.stringify() 将对象转化为json字符串
                     // localStorage.setItem("user",res.userDB);
                     localStorage.setItem("user", JSON.stringify(res.userDB));
-                    console.log("存入localStorage的user：", localStorage.getItem("user"));
-                    console.log("将json字符串转换成json对象的user：", JSON.parse(localStorage.getItem("user")));
+                    // console.log("存入localStorage的user：", localStorage.getItem("user"));
+                    // console.log("将json字符串转换成json对象的user：", JSON.parse(localStorage.getItem("user")));
                     // console.log(res.userDB);
                     this.userDB = res.userDB;
                     sessionStorage.setItem("token", this.userDB.username);
