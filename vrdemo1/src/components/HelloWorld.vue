@@ -179,18 +179,18 @@ a {
 }
 
 .el-carousel__item:nth-child(2n) {
-    background-image: url("../assets/home1.png");
+    background-image: url("../assets/home3.png");
     height: 500px;
     /*margin-bottom: 200px;*/
 }
 
 .el-carousel__item:nth-child(2n+1) {
-    background-image: url("../assets/home2.png");
+    background-image: url("../assets/home1.png");
     height: 500px;
 }
 
 .el-carousel__item:nth-child(3n) {
-    background-image: url("../assets/home3.png");
+    background-image: url("../assets/home2.png");
     height: 500px;
 }
 
@@ -206,9 +206,10 @@ a {
     margin-top: -128px;
     margin-left: -139px;
     background-color: #27A185;
-    font-size: 0.8vw;
+    font-size: 1vw;
     font-family: Source Han Sans SC;
-    font-weight: 500;
+    font-weight: 600;
+    letter-spacing: 0.3vw;
     color: #FFFEFE;
     position: absolute;
     z-index: 2;

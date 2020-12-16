@@ -11,7 +11,7 @@
                 <el-input v-model="ruleForm.sno"></el-input>
             </el-form-item>
             <el-form-item label="密码" prop="password">
-                <el-input v-model="ruleForm.password"></el-input>
+                <el-input type="password" v-model="ruleForm.password"></el-input>
             </el-form-item>
 
             <el-form-item>
@@ -24,6 +24,7 @@
 
 <script>
     import api from '../main'
+    import crypto123 from 'crypto'
     export default {
         name: "UserUpdate",
         data() {
@@ -45,41 +46,58 @@
                     ],
                     password: [
                         { required: true, message: '请输入内容', trigger: 'blur' },
-                        { min: 6, max: 50, message: '长度在 6 到 50 个字符', trigger: 'blur' }
+                        { min: 8, max: 50, message: '长度在 8 到 50 个字符', trigger: 'blur' }
                     ]
                 }
             };
         },
         methods: {
             submitForm(formName) {
-                const _this = this;
-                this.$refs[formName].validate((valid) => {
-                    // 从session中抓取当前操作老师的名字
-                    // this.ruleForm.teacher_name = sessionStorage.getItem("token");
-                    // console.log(this.ruleForm);
-                    if (valid) {
-                        axios.post(api.url + '/updateSingle/', this.ruleForm).then(function (resp) {
-                            // console.log(resp);
-                            if(resp.data)
-                            {
-                                _this.$alert('修改成功！', '消息', {
-                                    confirmButtonText: '确定',
-                                    callback: action => {
-                                        _this.$router.push('/addstudentnumber')
-                                    }
-                                });
-                            }
-                            else
-                            {
-                                return false;
-                            }
 
-                        })
-                    } else {
-                        this.$message.error("字段输入非法,请重新输入！");
-                        return false;
-                    }
-                });
+                let phoneTest = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,50}$/;  //校验密码8-18位
+
+                if (!phoneTest.test(this.ruleForm.password)) {
+                    this.$message.error('请不要设置简单密码，密码须包含数字、字母两种元素，且密码位数为8-50位');
+                    return false;
+                }else
+                {
+                    const _this = this;
+                    this.$refs[formName].validate((valid) => {
+                        // 从session中抓取当前操作老师的名字
+                        // this.ruleForm.teacher_name = sessionStorage.getItem("token");
+                        // console.log(this.ruleForm);
+
+                        // 密码MD5加密
+                        const md5 = crypto123.createHash('md5');
+                        md5.update(this.ruleForm.password);
+                        let aftermd5password = md5.digest('hex');
+                        // this.$message.success('加密后的密码为' + aftermd5password);
+                        this.ruleForm.password = aftermd5password;
+
+                        if (valid) {
+                            axios.post(api.url + '/updateSingle/', this.ruleForm).then(function (resp) {
+                                // console.log(resp);
+                                if(resp.data)
+                                {
+                                    _this.$alert('修改成功！', '消息', {
+                                        confirmButtonText: '确定',
+                                        callback: action => {
+                                            _this.$router.push('/addstudentnumber')
+                                        }
+                                    });
+                                }
+                                else
+                                {
+                                    return false;
+                                }
+
+                            })
+                        } else {
+                            this.$message.error("字段输入非法,请重新输入！");
+                            return false;
+                        }
+                    });
+                }
             },
             cancelForm(formName) {
                 // this.$refs[formName].resetFields();

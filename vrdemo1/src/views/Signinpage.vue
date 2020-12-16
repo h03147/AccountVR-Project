@@ -13,19 +13,19 @@
                 </el-form-item>
 
                 <el-form-item prop="sno"  v-if="!ch">
-                    <el-input v-model="ruleForm.sno" placeholder="studentusername" type="text" clearable></el-input>
+                    <el-input v-model="ruleForm.sno" placeholder="请输入学号" type="text" clearable></el-input>
                 </el-form-item>
                 <el-form-item prop="teacher_phone" v-if="ch">
-                    <el-input v-model="ruleForm.teacher_phone" placeholder="teacherusername" type="text" clearable></el-input>
+                    <el-input v-model="ruleForm.teacher_phone" placeholder="请输入账号" type="text" clearable></el-input>
                 </el-form-item>
                 <el-form-item prop="password">
-                    <el-input v-model="ruleForm.password" placeholder="password" type="password" show-password></el-input>
+                    <el-input v-model="ruleForm.password" placeholder="请输入密码" type="password" show-password></el-input>
                 </el-form-item>
 
                 <el-form-item class="elformdiv1">
                     <el-row class="elimgcoderow1">
                         <el-input class="input-material" v-model="code" type="text" placeholder="输入验证码"></el-input>
-                        <el-image class="elimage1" :src="imgCode" id="img-vcode" @click="getCodeImage" alt="验证码" style="padding: 0 10px"></el-image>
+                        <el-image class="elimage1" :src="imgCode" id="img-vcode" @click="getCodeImage2" alt="验证码" style="padding: 0 10px"></el-image>
                     </el-row>
 
                 </el-form-item>
@@ -103,14 +103,16 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid)
                     {
+                        let sessiontokenid = sessionStorage.getItem('tokenid')
                         const _this = this;
-                        axios.get(api.url + '/SigninIdentityCodeImage/' + this.code).then(function (resp) {
+                        axios.get(api.url + '/verifyImageCode/' + sessiontokenid + '/' + this.code).then(function (resp) {
                             // console.log("后端回传结果" + resp.data)
                             if(resp.data != true)
                             {
                                 _this.$message.error("验证码错误")
                                 _this.code = null;
-                                _this.getCodeImage();
+                                // _this.getCodeImage();
+                                _this.getCodeImage2();
                             }
                             else
                             {
@@ -154,7 +156,7 @@
                 // this.$message.success('加密后的密码为' + aftermd5password);
                 this.ruleForm.password = aftermd5password;
 
-                const  {data:res} = await $http.post("/login", this.ruleForm);
+                const  {data:res} = await axios.post(api.url + "/login", this.ruleForm);
                 // console.log("后端返回的数据：", res);
                 if(res.state)
                 {
@@ -169,6 +171,8 @@
                     location.href = '/';
                 }else
                 {
+                    this.code = null;
+                    this.getCodeImage2();
                     this.$message.error(res.msg);
                 }
             },
@@ -182,7 +186,7 @@
                 // this.$message.success('加密后的密码为' + aftermd5password);
                 this.ruleForm.password = aftermd5password;
 
-                const  {data:res} = await $http.post("/teacherlogin", this.ruleForm);
+                const  {data:res} = await axios.post(api.url + "/teacherlogin", this.ruleForm);
                 // console.log("后端返回的数据：", res);
                 if(res.state)
                 {
@@ -197,6 +201,8 @@
                     location.href = '/';
                 }else
                 {
+                    this.code = null;
+                    this.getCodeImage2();
                     this.$message.error(res.msg);
                 }
             },
@@ -231,18 +237,27 @@
 
             },
             //获取验证码
-            async getCodeImage() {
-                const {data: res} = await $http.get("/getImage");
+            // async getCodeImage() {
+            //     const {data: res} = await axios.get(api.url + "/getImage");
+            //     // console.log("解构前：" + res.data);
+            //     // console.log("后端返回的base64数据：", res);
+            //     this.imgCode = "data:image/png;base64," + res;
+            // },
+            //获取验证码方法2
+            async getCodeImage2() {
+                const {data: res} = await axios.get(api.url + "/creatNewCaptcha");
                 // console.log("解构前：" + res.data);
                 // console.log("后端返回的base64数据：", res);
-                this.imgCode = "data:image/png;base64," + res;
+                this.imgCode = "data:image/png;base64," + res.encode;
+                sessionStorage.setItem("tokenid", res.tokenid)
             },
         },
         created() {
             // console.log("123456"+this.ruleForm.identity);
             // location.href = '/signinpage';
             // this.$router.go(0);
-            this.getCodeImage();
+            // this.getCodeImage();
+            this.getCodeImage2();
         }
     }
 </script>

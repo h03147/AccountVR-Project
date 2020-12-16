@@ -166,23 +166,28 @@
 <!--                            <h2 align="left" style="text-indent: 2em">{{alldivForm.alldiv1.divparagra131}}</h2>-->
 <!--                            <img src="~@/assets/div1to17.png">-->
 
-                            <iframe src="/OperationManual/8.html" width="876" height="19100" frameborder="0" scrolling="auto" style="position:relative;margin: 0 auto;margin-left: -11%"></iframe>
+                            <iframe src="/OperationManual/15.html" width="876" height="23000" frameborder="0" scrolling="auto" style="position:relative;margin-top: -1%;"></iframe>
 
                         </div>
-                        <div class = "divitem2" v-if="current==1">
+                        <div class = "divitem9" v-if="current==1">
+                            <video class="divitem9video" src="~@/assets/introductionvideo.mp4" controls preload="metadata" poster="~@/assets/introductionvideominiimg.png"></video>
+                        </div>
+                        <div class = "divitem10" v-if="current==2">
+                            <video class="divitem9video" src="~@/assets/guidevideo.mp4" controls preload="metadata" poster="~@/assets/guidevideominiimg.png"></video>
+                        </div>
+                        <div class = "divitem2" v-if="current==3">
                             <h2 align="left"style="text-indent: 2em">{{alldivForm.alldiv2.divparagra1}}</h2>
                             <h2 align="left" style="text-indent: 2em">{{alldivForm.alldiv2.divparagra2}}</h2>
                             <h2 align="left" style="text-indent: 2em">{{alldivForm.alldiv2.divparagra3}}</h2>
                             <img src="~@/assets/organization.png">
-
                         </div>
-                        <div class = "divitem3" v-if="current==2">
+                        <div class = "divitem3" v-if="current==4">
                             <h2 align="left" style="text-indent: 2em">{{alldivForm.alldiv3.divparagra1}}</h2>
                             <h2 align="left" style="text-indent: 2em">{{alldivForm.alldiv3.divparagra2}}</h2>
                             <h2 align="left" style="text-indent: 2em">{{alldivForm.alldiv3.divparagra3}}</h2>
                             <h2 align="left" style="text-indent: 2em">{{alldivForm.alldiv3.divparagra4}}</h2>
                         </div>
-                        <div class = "divitem4" v-if="current==3">
+                        <div class = "divitem4" v-if="current==5">
                             <h1 align="left" style="text-indent: 2em">{{alldivForm.alldiv4.divparagra1}}</h1>
                             <h3 align="left" style="text-indent: 2em; font-weight: bold; font-size: 14px">{{alldivForm.alldiv4.divparagra2}}</h3>
                             <h1 align="left" style="text-indent: 2em">{{alldivForm.alldiv4.divparagra3}}</h1>
@@ -199,7 +204,7 @@
                             <h3 align="left" style="text-indent: 2em ; font-weight: bold; font-size: 14px">{{alldivForm.alldiv4.divparagra14}}</h3>
                             <h1 align="left" style="text-indent: 2em">{{alldivForm.alldiv4.divparagra15}}</h1>
                         </div>
-                        <div class = "divitem5" v-if="current==4">
+                        <div class = "divitem5" v-if="current==6">
                             <h2 align="left" style="text-indent: 2em">{{alldivForm.alldiv5.divparagra1}}</h2>
                             <h2 align="left" style="text-indent: 2em">{{alldivForm.alldiv5.divparagra2}}</h2>
                             <h2 align="left" style="text-indent: 2em">{{alldivForm.alldiv5.divparagra3}}</h2>
@@ -213,11 +218,11 @@
                             <h2 align="left" style="text-indent: 2em">{{alldivForm.alldiv5.divparagra11}}</h2>
                             <h2 align="left" style="text-indent: 2em">{{alldivForm.alldiv5.divparagra12}}</h2>
                         </div>
-                        <div class = "divitem6" v-if="current==5">
+                        <div class = "divitem6" v-if="current==7">
 <!--                            <img src="~@/static/Trump.jpg" class="image">-->
                             <img src="~@/assets/div6gradecomment.png">
                         </div>
-                        <div class = "divitem7" v-if="current==6">
+                        <div class = "divitem7" v-if="current==8">
                             <h3 align="left" style="text-indent: 2em; font-weight: bold; font-size: 14px">{{alldivForm.alldiv7.divparagra1}}</h3>
                             <h2 align="left" style="text-indent: 2em">{{alldivForm.alldiv7.divparagra2}}</h2>
                             <h2 align="left" style="text-indent: 2em">{{alldivForm.alldiv7.divparagra3}}</h2>
@@ -226,17 +231,12 @@
                             <h2 align="left" style="text-indent: 2em">{{alldivForm.alldiv7.divparagra6}}</h2>
                             <h2 align="left" style="text-indent: 2em">{{alldivForm.alldiv7.divparagra7}}</h2>
                         </div>
-                        <div class = "divitem8" v-if="current==7">
+                        <div class = "divitem8" v-if="current==9">
                             <h2 align="left" style="text-indent: 2em">{{alldivForm.alldiv8.divparagra1}}</h2>
                             <h2 align="left" style="text-indent: 2em">{{alldivForm.alldiv8.divparagra2}}</h2>
                             <h2 align="left" style="text-indent: 2em">{{alldivForm.alldiv8.divparagra3}}</h2>
                         </div>
-                        <div class = "divitem9" v-if="current==8">
-                            <video src="~@/assets/introductionvideo.mp4" controls preload="metadata" poster="~@/assets/introductionvideominiimg.png"></video>
-                        </div>
-                        <div class = "divitem10" v-if="current==9">
-                            <video src="~@/assets/guidevideo.mp4" controls preload="metadata" poster="~@/assets/guidevideominiimg.png"></video>
-                        </div>
+
                     </div>
                 </div>
             </el-col>
@@ -256,7 +256,7 @@
         data(){
             return{
                 list:[
-                    "操作手册","实验背景","实验目的","试验方法","实验步骤","成绩评定","学生要求","项目应用","简介视频","引导视频"
+                    "操作手册","简介视频","引导视频","实验背景","实验目的","实验方法","实验步骤","成绩评定","学生要求","项目应用"
                 ],
                 cur:0,
                 gotopage: "",
@@ -542,7 +542,9 @@
         font-weight: bolder;
         margin-top: 2%;
         margin-bottom: 1%;
-        margin-left: -74%;
+        /*margin-left: -74%;*/
+        float: left;
+        padding-left: 7%;
         color: #445F59;
     }
     .homepageswitchmaindiv {
@@ -553,9 +555,16 @@
         width: 876px;
         color: #333333;
     }
-    h2, h1 {
-        font-size: 0.8vw!important;
+    /* 右侧正文文字的统一大小*/
+    h1, h2 {
+        font-size: 0.9vw!important;
         font-weight: normal!important;
+        line-height:2.8vh;
+    }
+    /* 右侧正文小标题的文字统一大小*/
+    h3 {
+        font-size: 0.9vw!important;
+        /*font-weight: normal!important;*/
         line-height:2.8vh;
     }
     .lefttabdiv {
@@ -565,6 +574,12 @@
         font-family: Source Han Sans SC;
         font-weight: bolder;
         /*font-size: 0.8vw;*/
+    }
+    /* 视频的样式*/
+    .divitem9video {
+        width: 44.6vw;
+        height: 44.4vh;
+        object-fit: fill
     }
 
     /*.lefttabdiv:active {*/

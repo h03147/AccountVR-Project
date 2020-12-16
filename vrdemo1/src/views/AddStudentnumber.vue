@@ -21,6 +21,20 @@
             <el-form-item>
                 <el-button class="resetbutton1" size="medium" type="primary" @click="resetForm('addstudentForm')">清空</el-button>
             </el-form-item>
+            <el-form-item>
+                <el-upload
+                        class="upload-demo"
+                        action=""
+                        :show-file-list="false"
+                        :on-change="handleChange"
+                        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+                        :auto-upload="false"
+                        style="display: flex;align-items: center">
+                    <el-button class="batchbutton" size="medium" type="primary">批量添加</el-button>
+                    <div slot="tip" class="upload-demo-tip">只能上传xlsx/xls文件</div>
+                </el-upload>
+
+            </el-form-item>
         </el-form>
 
         <div class="headdiv2">
@@ -116,6 +130,8 @@
         timeout: 1000,
         headers: {'X-Custom-Header': 'foobar'}
     });
+    import { Loading } from 'element-ui';
+
     export default {
         name: "AddStudentnumber",
         data() {
@@ -150,6 +166,7 @@
                 msg: '',
                 ideatitystatus: '',
 
+                errorInfoList:[], //保存批量添加错误的用户信息
             };
         },
         created() {
@@ -195,7 +212,6 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-
                         let phoneTest = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,50}$/;  //校验密码8-18位
 
                         if (!phoneTest.test(this.addstudentForm.password)) {
@@ -236,6 +252,36 @@
                         return false;
                     }
                 });
+            },
+            submitList(object) {
+                            // 密码MD5加密
+                            const md5 = crypto123.createHash('md5');
+                            md5.update(object.password.toString());
+                            let aftermd5password = md5.digest('hex');
+                            // this.$message.success('加密后的密码为' + aftermd5password);
+                object.password = aftermd5password;
+                            const _this = this;
+                            axios.post(api.url + '/addstudentnumber', object).then(function (resp) {
+                                if(resp.data.state)
+                                {
+                                    // _this.$message.success(resp.data.msg);
+                                }else
+                                {
+                                    // _this.$message.error(resp.data.msg);
+                                    _this.errorInfoList.push(object)
+                                }
+                            });
+                            this.addstudentreportcardForm.sno = object.sno;
+                            axios.post(api.url + '/studentreportcard/addstudentrepotcard', this.addstudentreportcardForm).then(function (resp1) {
+                                if(resp1.data == "学号已存在")
+                                {
+                                    // _this.$message.success(resp1.data);
+                                }else
+                                {
+                                    // _this.$message.error(resp1.data);
+                                }
+                            });
+
             },
             //获取验证码
             async getCodeImage() {
@@ -308,12 +354,123 @@
                 if(index %2 == 0){
                     return 'warning-row'
                 }
+            },
+    handleChange(file, fileList) {
+        this.fileTemp = file.raw
+        if (this.fileTemp) {
+            if ((this.fileTemp.type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') || (this.fileTemp.type == 'application/vnd.ms-excel')) {
+                //读取文件获得数组对象
+                this.importfxx(this.fileTemp);
+
+            } else {
+                this.$message({
+                    type: 'warning',
+                    message: '附件格式错误，请删除后重新上传！'
+                })
             }
-
-
-
+        } else {
+            this.$message({
+                type: 'warning',
+                message: '请上传附件！'
+            })
         }
+    },
+    importfxx(obj) {
+        let _this = this;
+        // 通过DOM取文件数据
+        this.file = obj
+        var rABS = false; //是否将文件读取为二进制字符串
+        var f = this.file;
+        var reader = new FileReader();
+        //if (!FileReader.prototype.readAsBinaryString) {
+        FileReader.prototype.readAsBinaryString = function (f) {
+            var binary = "";
+            var rABS = false; //是否将文件读取为二进制字符串
+            var pt = this;
+            var wb; //读取完成的数据
+            var outdata;
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var bytes = new Uint8Array(reader.result);
+                var length = bytes.byteLength;
+                for (var i = 0; i < length; i++) {
+                    binary += String.fromCharCode(bytes[i]);
+                }
+                var XLSX = require('xlsx');
+                if (rABS) {
+                    wb = XLSX.read(btoa(fixdata(binary)), { //手动转化
+                        type: 'base64'
+                    });
+                } else {
+                    wb = XLSX.read(binary, {
+                        type: 'binary'
+                    });
+                }
+                outdata = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);//outdata就是你想要的东西
+                this.da = [...outdata]
+                // let arr = []
+
+
+                //显示用户等待框
+                const loading = Loading.service({
+                    lock: true,
+                    text: '正在录入信息，请等待...',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)'
+                });
+
+                this.da.map(v => {
+                    let obj = {}
+                    obj.username = v['姓名']
+                    obj.password = v['密码']
+                    obj.sno = v['学号']
+                    // arr.push(obj)
+                    console.log('obj');
+                    console.log(obj);
+                    _this.submitList(obj)
+            })
+                setTimeout(() => {
+                    loading.close();
+                    if (_this.errorInfoList.length == 0){
+                        _this.$message.success("批量添加信息成功！");
+                    } else{
+                        _this.$message.warning("批量添加部分成功，错误信息已生成文件。");
+                        _this.onClickDownDaily();
+                    }
+                }, 1500);
+                _this.errorInfoList=[];
+
+                /*this.$nextTick(() => { // 以服务的方式调用的 Loading 需要异步关闭
+                    loading.close();
+                });
+*/
+            }
+            reader.readAsArrayBuffer(f);
+        }
+
+        if (rABS) {
+            reader.readAsArrayBuffer(f);
+        } else {
+            reader.readAsBinaryString(f);
+        }
+    },
+            onClickDownDaily() {
+                let title = '错误信息'
+                let str=''
+                this.errorInfoList.forEach(item=>{
+                    str+='姓名:'+item.username+'   '+'学号:'+item.sno+'\r\n'
+                })
+                let allStr = title+'\r\n'+'\r\n'+str
+                let export_blob = new Blob([allStr]);
+                let save_link = document.createElement("a");
+                save_link.href = window.URL.createObjectURL(export_blob);
+                save_link.download = '错误信息导出'+'.txt';
+                save_link.click();
+                // let element = document.getElementById("a");
+                // element.parentElement.removeChild(element)
+            },
     }
+}
 </script>
 
 
@@ -344,7 +501,14 @@
         margin-bottom: 30px;
     }
     .demo-ruleForm {
-        margin-left: -21%;
+        margin-left: -6%;
+    }
+    .batchbutton{
+        margin-left: 30px;
+        background-color: #239973;
+    }
+    .upload-demo-tip{
+        margin-left: 5px;
     }
     .addbutton1, .elbuttonselectall {
         background-color: #239973;

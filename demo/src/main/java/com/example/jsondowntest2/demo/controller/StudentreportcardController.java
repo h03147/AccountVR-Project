@@ -1,9 +1,12 @@
 package com.example.jsondowntest2.demo.controller;
 
 import com.example.jsondowntest2.demo.dao.StudentreportcardDao;
+import com.example.jsondowntest2.demo.dao.UserDao;
 import com.example.jsondowntest2.demo.entity.Message;
 import com.example.jsondowntest2.demo.entity.Studentreportcard;
+import com.example.jsondowntest2.demo.entity.User;
 import com.example.jsondowntest2.demo.repository.StudentreportcardRepository;
+import com.example.jsondowntest2.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +22,14 @@ public class StudentreportcardController {
     private StudentreportcardRepository studentreportcardRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private StudentreportcardDao studentreportcardDao;
+
+    @Autowired
+    private UserDao userDao;
+
 
     @GetMapping("/findAllstudentreportcard")
     public List<Studentreportcard> findAllstudentreportcard() {
@@ -31,7 +41,9 @@ public class StudentreportcardController {
     public Map<String, Object> studentcount() {
         List<Studentreportcard> stulist = studentreportcardRepository.findAll();
         Map<String, Object> map = new HashMap<>();
-        int particinumber = stulist.size(); //参与人数
+        int particinumber = userRepository.findAll().size(); //参与人数
+        System.out.println("参与人数");
+        System.out.println(stulist.size());
         int completednumber = 0; //完成考试的人数
         int passnumber = 0;//及格人数
         double passrate = 0.0; //及格率
@@ -205,21 +217,30 @@ public class StudentreportcardController {
     //    添加默认学生信息
     @PostMapping("/addstudentrepotcard")
     public String addstudentrepotcard(@RequestBody Studentreportcard studentreportcard){
-        //        前端传过来的修改留言请求
-        System.out.println("前段传来的请求user"+studentreportcard);
-//        message.setRequest_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-//        message.setAnswer("未答复");
-//        Message addmessageresult = messageRepository.save(message);
-        studentreportcard.setExamstatus("2");
-        studentreportcard.setExamgrade("-1");
-        studentreportcard.setSpendtime("-1");
-        Studentreportcard addstudentresult =studentreportcardRepository.save(studentreportcard);
-        if(addstudentresult != null)
+
+        User bySon= userDao.findBySno(studentreportcard.getSno());
+        if(bySon == null)
         {
-            return "student reportcard default success!";
+        //        前端传过来的修改留言请求
+            System.out.println("前段传来的请求user"+studentreportcard);
+    //        message.setRequest_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+    //        message.setAnswer("未答复");
+    //        Message addmessageresult = messageRepository.save(message);
+            studentreportcard.setExamstatus("2");
+            studentreportcard.setExamgrade("-1");
+            studentreportcard.setSpendtime("-1");
+            Studentreportcard addstudentresult =studentreportcardRepository.save(studentreportcard);
+            if(addstudentresult != null)
+            {
+                return "student reportcard default success!";
+            }else
+            {
+                return "add student failed!";
+            }
         }else
         {
-            return "add student failed!";
+            //学号已存在，新建用户时不将用户在report表初始化
+            return "学号已存在！";
         }
     }
 }

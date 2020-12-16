@@ -8,7 +8,6 @@ import com.example.jsondowntest2.demo.util.VerifyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -85,8 +84,8 @@ public class UserController {
         return map;
     }
 
-    //    对查询所有人员信息前先生成验证码，让前端来请求并校验
-//生成验证码图片==》响应一个 base64 字符串
+    // 对查询所有人员信息前先生成验证码，让前端来请求并校验
+    // 生成验证码图片==》响应一个 base64 字符串
     @GetMapping("/getImage")
     public String getImageCode(HttpServletRequest request) throws IOException {
         //1.使用工具类生成验证码(包括image和code)
@@ -106,7 +105,15 @@ public class UserController {
         return encode;
     }
 
+    // 验证码生成方案2
+    // 创建验证码的新键值对
+    @GetMapping("/creatNewCaptcha")
+    public Map<String, String> creatNewCaptcha() throws IOException{
+        Map<String, String> map = new HashMap<>();
+        return userService.saveCaptchaStatus();
+    }
 
+    //
 
     //    查询所有人员信息
     @GetMapping("/findAll/{code}")
@@ -148,6 +155,16 @@ public class UserController {
 
     }
 
+    // 登陆界面对比验证码方式2
+    // 校验验证码
+    @GetMapping("/verifyImageCode/{tokenid}/{ImageCode}")
+    public Boolean verifyImageCode(
+            @PathVariable("tokenid") String tokenid,
+            @PathVariable("ImageCode") String ImageCode) {
+        return userService.verifyCaptchaStatus(tokenid, ImageCode);
+    }
+
+
     @Autowired
     private UserDao userDao;
 //    根据id获取数据
@@ -173,6 +190,20 @@ public class UserController {
         System.out.println("前端传来根据id删除的请求" + id);
         return userService.deletestudentById(id);
     }
+
+//    // 创建验证码的新键值对
+//    @GetMapping("/creatNewCaptcha")
+//    public String creatNewCaptcha() {
+//        return userService.saveCaptchaStatus();
+//    }
+//
+//    // 校验验证码
+//    @GetMapping("/verifyImageCode/{tokenid}/{ImageCode}")
+//    public Boolean verifyImageCode(
+//            @PathVariable("tokenid") String tokenid,
+//            @PathVariable("ImageCode") String ImageCode) {
+//        return userService.verifyCaptchaStatus(tokenid, ImageCode);
+//    }
 
 
 }

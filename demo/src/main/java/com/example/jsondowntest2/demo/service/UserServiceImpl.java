@@ -2,18 +2,29 @@ package com.example.jsondowntest2.demo.service;
 
 import com.example.jsondowntest2.demo.dao.UserDao;
 import com.example.jsondowntest2.demo.entity.User;
+import com.example.jsondowntest2.demo.util.VerifyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
+import org.springframework.util.Base64Utils;
 
+import javax.imageio.ImageIO;
 import javax.transaction.Transactional;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
+
+    // 初始化一个全局hash
+    Map<String, String> All_Captcha_map = new HashMap<>();
 
     @Override
     public User login(User user) {
@@ -85,5 +96,60 @@ public class UserServiceImpl implements UserService {
     public int deletestudentById(Integer id) {
         int deleteResult = userDao.deleteById(id);
         return deleteResult;
+    }
+
+    // 并发多验证码的生成
+    @Override
+    public Map<String, String> saveCaptchaStatus() throws IOException {
+        // 生成随机键key
+        String uuidkey = null;
+        UUID getuuidkey = UUID.randomUUID();
+        uuidkey = String.valueOf(getuuidkey);
+        // 生成随机验证码值value
+        Map<String, Object> getImageCode = VerifyUtil.createImageCode();
+        // 获取图片验证码对应的值
+        String getImageCodeValue = (String) getImageCode.get("code");
+        All_Captcha_map.put(uuidkey, getImageCodeValue);
+//        System.out.println("这是全部的验证码map：" + All_Captcha_map);
+
+        // 生成验证图片
+        BufferedImage image = (BufferedImage) getImageCode.get("image");
+        //3.将图片转化为base64
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        //5.响应给浏览器  ImageIO ：工具类
+        ImageIO.write(image, "png", outputStream);
+        String encode = Base64Utils.encodeToString(outputStream.toByteArray());
+        // 返回值map创建
+        Map<String, String> back_map = new HashMap<>();
+        back_map.put("tokenid", uuidkey);
+        back_map.put("encode", encode);
+        return back_map;
+    }
+
+    // 验证码登录校验
+    public Boolean verifyCaptchaStatus(String key, String value) {
+        if(All_Captcha_map.containsKey(key) == false || key == null || key.length() == 0)
+        {
+            return false;
+        }else {
+            String ImageCode1 = All_Captcha_map.get(key);
+            if(ImageCode1 == null || ImageCode1.length() == 0)
+            {
+                return false;
+            }else {
+                if(value.equalsIgnoreCase(ImageCode1))
+                {
+//                    System.out.println("key和value都比对成功：");
+                    // 比对成功立刻让此验证码失效，释放空间
+                    All_Captcha_map.remove(key);
+//                    System.out.println("释放后的map：" + All_Captcha_map);
+                    return true;
+                }else {
+//                    System.out.println("value比对失败：");
+                    return false;
+                }
+
+            }
+        }
     }
 }

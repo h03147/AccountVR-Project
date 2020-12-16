@@ -202,7 +202,7 @@ export default {
 /*router-link激活时的颜色设置--*/
 .routerlinktohome, .routerlinkanswerquestion, .routerlinktologinpage, .routerlinktomessage, .routerlinktoabout,
 .routerlinktohome, .routerlinktoHomepage, .routerlinkaddmessage, .routerlinkaddstudentnumber, .routerlinktodataview {
-    font-size: 0.8vw;
+    font-size: 0.9vw;
     text-decoration: none;
     color: azure;
     }
@@ -219,12 +219,14 @@ export default {
     height: 70px!important;
   }
   .bottomimg {
-    margin-left: -20px;
+    /*margin-left: -20px;*/
+      width: 100%;
     /*width: 1920px;*/
   }
   .elfontercontext {
     height: 40px!important;
     margin-top: 10px!important;
+      padding: 0!important;
   }
   .menuitemchangeloginstatus{
     padding: 0!important;
