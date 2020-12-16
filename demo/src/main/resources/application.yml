@@ -10,9 +10,9 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
   datasource:
-    username: root
-    password: root
-    url: jdbc:mysql://localhost:3306/mybatis?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    username: please input your own username
+    password: please input your own password
+    url: jdbc:mysql://localhost:3306/youowndatabase?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
     driver-class-name: com.mysql.jdbc.Driver
   jpa:
     show-sql: true

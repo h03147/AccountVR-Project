@@ -21,13 +21,8 @@ new Vue({
   render: h => h(App)
 }).$mount('#app')
 
-const url = "http://210.30.0.6:80";
-// const url = "http://192.168.31.100:80";
-// const url = "http://localhost:80";
+const url = "http://localhost:80";
 
-
-// const url = "http://218.61.208.67:81";
-// const url1 = "http://192.168.31.80:8080";
 const url1 = "http://localhost:8080";
 
 export default {
