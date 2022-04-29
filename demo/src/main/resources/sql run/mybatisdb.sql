@@ -27,7 +27,7 @@ CREATE TABLE `user` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-insert  into `user`(`username`,`password`,`sno`,`teacher_phone`) values ('叶小兮','b91af46dddd12a947a86469e2be8631a','','15629968857'),('王老师','laowang123456','','15629968857');
+insert  into `user`(`username`,`password`,`sno`,`teacher_phone`) values ('叶小兮','b91af46dddd12a947a86469e2be8631a','','15629968857'),('王老师','laowang123456','','13865240466');
 
 insert  into `user`(`username`,`password`,`sno`,`teacher_phone`) values ('高老师','GQ123456','','GS2020');
 
